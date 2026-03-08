@@ -12,10 +12,8 @@ A modern, web-based salon management system built to streamline daily operations
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
 - [Installation](#installation)
-  - [Prerequisites](#prerequisites)
-  - [Backend Setup (Django)](#backend-setup-django)
-  - [Frontend Setup (Next.js)](#frontend-setup-nextjs)
 - [Environment Variables](#environment-variables)
+- [Docker Reference](#docker-reference)
 - [Database Modules](#database-modules)
 - [Security](#security)
 - [Deployment](#deployment)
@@ -102,6 +100,7 @@ Elysian Hair Spa serves clients across hair, nail, skin, and beauty services. As
 | Database | PostgreSQL |
 | Authentication | JWT (SimpleJWT) |
 | API Docs | Swagger / OpenAPI |
+| Containerization | Docker, Docker Compose |
 | Frontend Hosting | Vercel *(tentative)* |
 | Backend Hosting | AWS / DigitalOcean / Render *(tentative)* |
 
@@ -128,147 +127,173 @@ The frontend handles role-based routing and communicates with the backend exclus
 
 ## Installation
 
+The project runs entirely through **Docker**. You do not need to install Python, Node.js, or PostgreSQL manually — Docker handles all of that.
+
 ### Prerequisites
 
-Make sure you have the following installed before proceeding:
+- **Git** — https://git-scm.com
+- **Docker Desktop** — https://www.docker.com/products/docker-desktop
 
-- **Python** 3.11+
-- **Node.js** 18+ and **npm** or **yarn**
-- **PostgreSQL** 14+
-- **Git**
+Verify Docker is installed after setup:
+```bash
+docker --version
+```
 
 ---
 
-### Backend Setup (Django)
+### 1. Clone the repository
 
-**1. Clone the repository**
 ```bash
 git clone https://github.com/your-org/elysian-hair-spa.git
 cd elysian-hair-spa
 ```
 
-**2. Navigate to the backend directory**
-```bash
-cd backend
-```
+---
 
-**3. Create and activate a virtual environment**
-```bash
-# Create
-python -m venv venv
+### 2. Set up environment variables
 
-# Activate — macOS/Linux
-source venv/bin/activate
-
-# Activate — Windows
-venv\Scripts\activate
-```
-
-**4. Install dependencies**
-```bash
-pip install -r requirements.txt
-```
-
-**5. Set up environment variables**
-
-Copy the example env file and fill in your values:
+Copy the example env file:
 ```bash
 cp .env.example .env
 ```
-See [Environment Variables](#environment-variables) for details.
 
-**6. Create the PostgreSQL database**
+Then generate a secure Django secret key:
 ```bash
-psql -U postgres
-CREATE DATABASE elysian_db;
-\q
+docker run --rm python:3.12-slim python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
 ```
 
-**7. Run migrations**
-```bash
-python manage.py migrate
-```
-
-**8. Create a superuser (Admin)**
-```bash
-python manage.py createsuperuser
-```
-
-**9. (Optional) Seed initial data**
-```bash
-python manage.py loaddata fixtures/initial_data.json
-```
-
-**10. Start the development server**
-```bash
-python manage.py runserver
-```
-
-The backend will be running at `http://localhost:8000`.
-API docs available at `http://localhost:8000/api/docs/`.
+Open `.env` and paste the generated key as the value for `SECRET_KEY`. The database credentials in `.env.example` work as-is for local development — Docker automatically creates the PostgreSQL database using those values on first boot. See [Environment Variables](#environment-variables) for a full breakdown.
 
 ---
 
-### Frontend Setup (Next.js)
+### 3. Build and start all containers
 
-**1. Navigate to the frontend directory**
 ```bash
-cd ../frontend
+docker-compose up --build
 ```
 
-**2. Install dependencies**
+This single command:
+- Pulls the PostgreSQL image and creates the database
+- Builds and starts the Django backend
+- Runs all migrations automatically
+- Builds and starts the Next.js frontend
+
+First build takes a few minutes. Subsequent startups are much faster.
+
+---
+
+### 4. Verify everything is running
+
+| Service | URL |
+|---|---|
+| Frontend | http://localhost:3000 |
+| Backend API | http://localhost:8000/api/ |
+| Django Admin | http://localhost:8000/admin/ |
+| Database | `localhost:5432` (connect via TablePlus or pgAdmin) |
+
+---
+
+### 5. Create a superuser (Admin account)
+
+In a separate terminal, while the containers are running:
 ```bash
-npm install
-# or
-yarn install
+docker-compose exec backend python manage.py createsuperuser
 ```
 
-**3. Set up environment variables**
-```bash
-cp .env.local.example .env.local
-```
+---
 
-**4. Start the development server**
-```bash
-npm run dev
-# or
-yarn dev
-```
+### That's it
 
-The frontend will be running at `http://localhost:3000`.
+The full stack is running. No manual database setup, no virtual environments, no separate server commands.
+
+To stop everything:
+```bash
+docker-compose down
+```
 
 ---
 
 ## Environment Variables
 
-### Backend (`backend/.env`)
+All environment variables live in a single `.env` file at the root of the repository. This file is **never committed to Git**.
 
-```env
-# Django
-SECRET_KEY=your-django-secret-key
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
+| Variable | Description | Example |
+|---|---|---|
+| `SECRET_KEY` | Django's cryptographic master key — generate once, keep secret | `3n6y#p!q8$vx...` |
+| `DEBUG` | `True` for local development, `False` in production | `True` |
+| `ALLOWED_HOSTS` | Comma-separated list of accepted hostnames | `localhost,127.0.0.1` |
+| `DB_NAME` | PostgreSQL database name — Docker creates this automatically | `elysian_db` |
+| `DB_USER` | PostgreSQL username — Docker creates this automatically | `elysian_user` |
+| `DB_PASSWORD` | PostgreSQL password — Docker creates this automatically | `elysian_password` |
+| `CORS_ALLOWED_ORIGINS` | Origins allowed to call the Django API | `http://localhost:3000` |
+| `NEXT_PUBLIC_API_URL` | The API base URL used by the Next.js frontend | `http://localhost:8000/api` |
 
-# Database
-DB_NAME=elysian_db
-DB_USER=postgres
-DB_PASSWORD=your-db-password
-DB_HOST=localhost
-DB_PORT=5432
+---
 
-# JWT
-JWT_ACCESS_TOKEN_LIFETIME=60        # minutes
-JWT_REFRESH_TOKEN_LIFETIME=7        # days
+## Docker Reference
 
-# CORS
-CORS_ALLOWED_ORIGINS=http://localhost:3000
+### Everyday commands
+
+| Task | Command |
+|---|---|
+| Start all containers | `docker-compose up` |
+| Start and rebuild images | `docker-compose up --build` |
+| Stop all containers | `docker-compose down` |
+| Stop and wipe the database | `docker-compose down -v` |
+| View logs for a service | `docker-compose logs backend` |
+| Restart a single service | `docker-compose restart backend` |
+
+### Running Django management commands
+
+All Django commands must be run inside the backend container:
+
+```bash
+# Run migrations after adding or changing a model
+docker-compose exec backend python manage.py makemigrations
+docker-compose exec backend python manage.py migrate
+
+# Create a superuser
+docker-compose exec backend python manage.py createsuperuser
+
+# Open a shell inside the container
+docker-compose exec backend sh
 ```
 
-### Frontend (`frontend/.env.local`)
+### Installing new packages
 
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8000/api
+Adding a package requires rebuilding the container image since packages live inside Docker, not on your local machine.
+
+**Python (Django):**
+```bash
+# 1. Install locally to update requirements.txt (venv must be active)
+pip install <package-name>
+pip freeze > backend/requirements.txt
+
+# 2. Rebuild the backend image
+docker-compose up --build backend
 ```
+
+**Node.js (Next.js):**
+```bash
+# 1. Install locally to update package.json
+cd frontend
+npm install <package-name>
+
+# 2. Rebuild the frontend image
+docker-compose up --build frontend
+```
+
+### Connecting to the database (TablePlus / pgAdmin)
+
+While containers are running, connect with:
+
+| Field | Value |
+|---|---|
+| Host | `localhost` |
+| Port | `5432` |
+| Database | value of `DB_NAME` in your `.env` |
+| User | value of `DB_USER` in your `.env` |
+| Password | value of `DB_PASSWORD` in your `.env` |
 
 ---
 
@@ -311,9 +336,12 @@ NEXT_PUBLIC_API_URL=http://localhost:8000/api
 **Pre-deployment checklist:**
 - [ ] Set `DEBUG=False` in production
 - [ ] Configure `ALLOWED_HOSTS` with your domain
-- [ ] Set all secrets as environment variables (never commit `.env` files)
+- [ ] Set all secrets as environment variables on the hosting platform (never commit `.env`)
+- [ ] Switch Django run command from `runserver` to `gunicorn`
+- [ ] Switch Next.js from `npm run dev` to `npm run build && npm start`
 - [ ] Enable HTTPS on all endpoints
 - [ ] Run `python manage.py collectstatic` before deploying the backend
+- [ ] Point `DB_HOST` to your managed PostgreSQL instance
 
 ---
 

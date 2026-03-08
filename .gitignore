@@ -42,6 +42,8 @@ Thumbs.db
 *.swp
 *.swo
 
+.env
+
 # Logs
 *.log
 npm-debug.log*
