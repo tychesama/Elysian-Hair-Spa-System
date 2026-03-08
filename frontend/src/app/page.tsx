@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import Header from '@/components/Header'
 
 type Service = {
   id: number
@@ -19,17 +20,21 @@ export default function Home() {
   }, [])
 
   return (
-    <main style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h1>Elysian Hair Spa — Services</h1>
-      {services.length === 0 && <p>No services yet. Add one via the Django API. localhost:8000/api/services/</p>}
-      <ul>
-        {services.map(s => (
-          <li key={s.id}>
-            <strong>{s.name}</strong> — {s.category} — ₱{s.price}
-            {s.description && <p>{s.description}</p>}
-          </li>
-        ))}
-      </ul>
-    </main>
+    <>
+      <Header />
+      <main style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
+
+        <h1>Elysian Hair Spa — Services</h1>
+        {services.length === 0 && <p>No services yet. Add one via the Django API. localhost:8000/api/services/</p>}
+        <ul>
+          {services.map(s => (
+            <li key={s.id}>
+              <strong>{s.name}</strong> — {s.category} — ₱{s.price}
+              {s.description && <p>{s.description}</p>}
+            </li>
+          ))}
+        </ul>
+      </main>
+    </>
   )
 }
