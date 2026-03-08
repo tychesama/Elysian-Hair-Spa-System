@@ -1,26 +1,493 @@
 @import "tailwindcss";
 
+/* ============================================================
+   ELYSIAN HAIR SPA — DESIGN SYSTEM
+   Fonts: Archivo (UI/body) · Cormorant Garamond (display/headings)
+   ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* — Brand Colors — */
+  --champagne:        #F7E7CE;
+  --pearl:            #F8F6F2;
+  --lavender-soft:    #D8C8F0;
+  --lavender-deep:    #A78BFA;
+  --lavender-hover:   #8F6FE8;
+  --champagne-hover:  #EEDFC2;
+
+  /* — Semantic UI Colors — */
+  --success:          #7BC47F;
+  --danger:           #E57373;
+  --neutral:          #CFCFCF;
+
+  /* — Text — */
+  --text-main:        #2E2E2E;
+  --text-subtle:      #6E6E6E;
+  --text-light:       #FFFFFF;
+
+  /* — Backgrounds — */
+  --bg-main:          #FDFCF9;
+  --bg-section:       #F8F6F2;
+  --bg-card:          #FFFFFF;
+  --bg-admin:         #F4F1FA;
+
+  /* — Borders — */
+  --border:           #E5E0D8;
+
+  /* — Typography — */
+  --font-display:     'Cormorant Garamond', Georgia, serif;
+  --font-body:        'Archivo', system-ui, sans-serif;
+
+  /* — Spacing & Shape — */
+  --radius-sm:        6px;
+  --radius-md:        12px;
+  --radius-lg:        20px;
+  --radius-pill:      999px;
+
+  /* — Shadows — */
+  --shadow-soft:      0 2px 12px rgba(167, 139, 250, 0.08);
+  --shadow-card:      0 4px 24px rgba(46, 46, 46, 0.07);
+  --shadow-elevated:  0 8px 40px rgba(167, 139, 250, 0.15);
+
+  /* — Transitions — */
+  --transition-fast:  150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base:  250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow:  400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* — Legacy aliases for Tailwind compat — */
+  --background:       var(--bg-main);
+  --foreground:       var(--text-main);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background:   var(--bg-main);
+  --color-foreground:   var(--text-main);
+  --font-sans:          var(--font-body);
+  --font-display:       var(--font-display);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #404186;
-  }
+/* ============================================================
+   BASE RESET & DEFAULTS
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.65;
+  min-height: 100dvh;
 }
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--text-main);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+}
+
+h1 { font-size: clamp(2.4rem, 5vw, 4rem);   font-weight: 400; font-style: italic; }
+h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); }
+h3 { font-size: clamp(1.3rem, 2.5vw, 1.9rem); }
+h4 { font-size: 1.25rem; font-family: var(--font-body); font-weight: 600; letter-spacing: 0; }
+h5 { font-size: 1rem;    font-family: var(--font-body); font-weight: 600; }
+h6 { font-size: 0.875rem; font-family: var(--font-body); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+
+p {
+  color: var(--text-subtle);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+.lead {
+  font-size: 1.125rem;
+  font-weight: 300;
+  color: var(--text-subtle);
+  line-height: 1.75;
+}
+
+/* Display / Hero text */
+.display-text {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+/* Eyebrow / label above headings */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lavender-deep);
+}
+
+a {
+  color: var(--lavender-deep);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--lavender-hover);
+}
+
+/* ============================================================
+   SELECTION
+   ============================================================ */
+
+::selection {
+  background: var(--lavender-soft);
+  color: var(--text-main);
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-section);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--lavender-soft);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--lavender-deep);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* Primary — Champagne */
+.btn-primary {
+  background: var(--champagne);
+  color: var(--text-main);
+  border-color: var(--champagne);
+}
+.btn-primary:hover {
+  background: var(--champagne-hover);
+  border-color: var(--champagne-hover);
+  box-shadow: 0 4px 16px rgba(247, 231, 206, 0.5);
+}
+
+/* Accent — Deep Lavender */
+.btn-accent {
+  background: var(--lavender-deep);
+  color: var(--text-light);
+  border-color: var(--lavender-deep);
+}
+.btn-accent:hover {
+  background: var(--lavender-hover);
+  border-color: var(--lavender-hover);
+  box-shadow: 0 4px 20px rgba(167, 139, 250, 0.4);
+}
+
+/* Outline */
+.btn-outline {
+  background: transparent;
+  color: var(--lavender-deep);
+  border-color: var(--lavender-deep);
+}
+.btn-outline:hover {
+  background: var(--lavender-soft);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Ghost */
+.btn-ghost {
+  background: transparent;
+  color: var(--text-subtle);
+  border-color: var(--border);
+}
+.btn-ghost:hover {
+  background: var(--bg-section);
+  color: var(--text-main);
+  border-color: var(--neutral);
+}
+
+/* Success */
+.btn-success {
+  background: #7BC47F;
+  color: var(--text-light);
+  border-color: #7BC47F;
+}
+.btn-success:hover {
+  background: #69b36d;
+  border-color: #69b36d;
+  box-shadow: 0 4px 14px rgba(123, 196, 127, 0.35);
+}
+
+/* Danger */
+.btn-danger {
+  background: #E57373;
+  color: var(--text-light);
+  border-color: #E57373;
+}
+.btn-danger:hover {
+  background: #d95f5f;
+  border-color: #d95f5f;
+  box-shadow: 0 4px 14px rgba(229, 115, 115, 0.35);
+}
+
+/* Disabled */
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  background: var(--neutral);
+  color: var(--text-subtle);
+  border-color: var(--neutral);
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+/* Sizes */
+.btn-sm { padding: 0.4rem 1rem;   font-size: 0.8rem; }
+.btn-lg { padding: 0.875rem 2rem; font-size: 1rem;   }
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-elevated);
+  transform: translateY(-2px);
+}
+
+.card-champagne {
+  background: var(--champagne);
+  border-color: var(--champagne-hover);
+}
+
+.card-lavender {
+  background: linear-gradient(135deg, var(--bg-admin) 0%, #ede8fa 100%);
+  border-color: var(--lavender-soft);
+}
+
+/* ============================================================
+   FORM ELEMENTS
+   ============================================================ */
+
+input, textarea, select {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--text-main);
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.625rem 1rem;
+  width: 100%;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  outline: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--neutral);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--lavender-deep);
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
+}
+
+label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+/* ============================================================
+   BADGES / TAGS
+   ============================================================ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: var(--radius-pill);
+}
+
+.badge-lavender {
+  background: var(--lavender-soft);
+  color: var(--lavender-hover);
+}
+
+.badge-champagne {
+  background: var(--champagne);
+  color: #b07d3a;
+}
+
+.badge-success {
+  background: #e8f7e9;
+  color: #4a9e4f;
+}
+
+.badge-danger {
+  background: #fdeaea;
+  color: #c0392b;
+}
+
+/* ============================================================
+   DIVIDERS
+   ============================================================ */
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+
+.divider-ornament {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--lavender-soft);
+  font-size: 1.2rem;
+  margin: 2rem 0;
+}
+
+.divider-ornament::before,
+.divider-ornament::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ============================================================
+   SECTION UTILITIES
+   ============================================================ */
+
+.section {
+  background: var(--bg-section);
+}
+
+.section-admin {
+  background: var(--bg-admin);
+}
+
+.section-white {
+  background: var(--bg-card);
+}
+
+/* ============================================================
+   FOCUS VISIBLE (Accessibility)
+   ============================================================ */
+
+:focus-visible {
+  outline: 2px solid var(--lavender-deep);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease both;
+}
+
+/* Stagger helpers */
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
