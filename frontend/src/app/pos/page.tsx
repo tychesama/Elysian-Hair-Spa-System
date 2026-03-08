@@ -8,6 +8,7 @@ export default function PointOfSale() {
         <h1 className="text-3xl font-bold">PointOfSale</h1>
 
         <div className="mt-6 px-4 py-2 bg-gray-100 rounded">
+          <p>- Employees and Admin only sees this</p>
           <p>- Create transactions</p>
           <p>- Add services/products</p>
           <p>- Apply discounts</p>

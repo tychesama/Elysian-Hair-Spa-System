@@ -46,7 +46,8 @@ export default function LandingPage() {
           Welcome to
         </p>
         <h1 className="display-text animate-fade-up" style={{ marginBottom: '1rem' }}>
-          Elysian Hair Spa
+          Elysian Hair Spa 
+          <p>TEMPORARY LANDING PAGE</p>
         </h1>
         <p className="lead animate-fade-up delay-2" style={{
           maxWidth: '520px',

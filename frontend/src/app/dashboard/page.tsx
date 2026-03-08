@@ -8,6 +8,7 @@ export default function Dashboard() {
         <h1 className="text-3xl font-bold">Dashboard</h1>
 
         <div className="mt-6 px-4 py-2 bg-gray-100 rounded">
+          <p>- Admin only sees this</p>
           <p>- Sales reports (daily, weekly, monthly, custom)</p>
           <p>- Revenue tracking</p>
           <p>- Top services & employee performance</p>
