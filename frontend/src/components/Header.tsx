@@ -20,10 +20,6 @@ export default function Header() {
         gap: '1rem',
       }}
     >
-      <Link href="/" style={linkStyle('/')}>
-        Home(TEMPORARY)
-      </Link>
-
       <Link href="/landing" style={linkStyle('/landing')}>
         Landing
       </Link>
