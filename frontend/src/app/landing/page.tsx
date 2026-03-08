@@ -1,4 +1,5 @@
 import Header from '@/components/Header'
+
 export default function Landing() {
   return (
     <>
@@ -7,15 +8,15 @@ export default function Landing() {
         <h1 className="text-3xl font-bold">Landing</h1>
 
         <div className="mt-6 px-4 py-2 bg-gray-100 rounded">
-          - THE ONLY PART THAT IS MOBILE ACCESSIBLE(responsive)
-          - Hero section
-          - About Elysian Hair Spa
-          - Services overview
-          - Price list
-          - Gallery & testimonials
-          - Contact info
-          - Book Now button
-          - Login button
+          <p>- THE ONLY PART THAT IS MOBILE ACCESSIBLE (responsive)</p>
+          <p>- Hero section</p>
+          <p>- About Elysian Hair Spa</p>
+          <p>- Services overview</p>
+          <p>- Price list</p>
+          <p>- Gallery & testimonials</p>
+          <p>- Contact info</p>
+          <p>- Book Now button</p>
+          <p>- Login button</p>
         </div>
       </div>
     </>

@@ -1,4 +1,5 @@
 import Header from '@/components/Header'
+
 export default function Dashboard() {
   return (
     <>
@@ -7,7 +8,12 @@ export default function Dashboard() {
         <h1 className="text-3xl font-bold">Dashboard</h1>
 
         <div className="mt-6 px-4 py-2 bg-gray-100 rounded">
-          Page under construction
+          <p>- Sales reports (daily, weekly, monthly, custom)</p>
+          <p>- Revenue tracking</p>
+          <p>- Top services & employee performance</p>
+          <p>- Manage services, prices, employees</p>
+          <p>- Export reports (PDF/Excel)</p>
+          <p>- System settings</p>
         </div>
       </div>
     </>
