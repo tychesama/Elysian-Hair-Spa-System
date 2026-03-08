@@ -21,6 +21,10 @@ export default function Header() {
       }}
     >
       <Link href="/" style={linkStyle('/')}>
+        Home(TEMPORARY)
+      </Link>
+
+      <Link href="/landing" style={linkStyle('/landing')}>
         Landing
       </Link>
 
