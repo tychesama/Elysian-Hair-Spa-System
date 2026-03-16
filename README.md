@@ -157,7 +157,8 @@ Copy the example env file:
 cp .env.example .env
 ```
 
-Then generate a secure Django secret key:
+OPTIONAL: (needs installation of django first)
+Generate a secure Django secret key:
 ```bash
 docker run --rm python:3.12-slim python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
 ```
@@ -179,6 +180,14 @@ This single command:
 - Builds and starts the Next.js frontend
 
 First build takes a few minutes. Subsequent startups are much faster.
+
+```bash
+cd frontend
+npm install
+```
+
+This fixes the react syntax errors
+PS: THERE IS NO HOT RELOAD SO EITHER USE NPM RUN DEV OR RESTART FE IN THE DOCKER APP
 
 ---
 
